@@ -307,10 +307,15 @@ class HiveServerTColumnValue2(object):
 
   @classmethod
   def mark_nulls(cls, values, bytestring):
+    def get_bytes_from_bits(bit_string):
+      padded_bits = bit_string + '0' * (8 - len(bit_string) % 8)
+      return list(int(padded_bits, 2).to_bytes(len(padded_bits) // 8, 'big'))
+
     if sys.version_info[0] < 3 or isinstance(bytestring, bytes):
       mask = bytearray(bytestring)
     else:
-      mask = bytearray(bytestring, 'utf-8')
+      bitstring = ''.join(format(ord(byte), '08b') for byte in bytestring)
+      mask = get_bytes_from_bits(bitstring)
 
     for n in mask:
       yield n & 0x01
