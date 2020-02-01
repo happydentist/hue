@@ -3923,7 +3923,8 @@ ${ commonheader("Job Browser", "jobbrowser", user, request) | n,unicode }
         loadHash();
       });
 
-      huePubSub.publish('cluster.config.get.config');
+      huePubSub.publish('cluster.config.refresh.config');
+      ## huePubSub.publish('cluster.config.get.config');
 
       huePubSub.subscribe('submit.rerun.popup.return${ SUFFIX }', function (data) {
         $.jHueNotify.info('${_("Rerun submitted.")}');
